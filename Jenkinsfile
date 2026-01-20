@@ -5,6 +5,7 @@ pipeline{
             steps{
                 echo "========Build has started========"
                 dir("backend"){
+                    sh 'mvn --version'
                     sh 'mvn clean package -DskipTests'
                 }
             }
