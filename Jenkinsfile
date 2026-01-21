@@ -4,13 +4,17 @@ pipeline{
     tools{
     maven 'Maven'
   }
+
+  parameters {
+        choice(name: 'ENVIRONMENT', choices: ['dev', 'prod'], description: 'Zielumgebung auswählen')
+    }
     stages{
         stage("Build"){
             steps{
                 echo "========Build has started========"
                 dir("backend"){
                     sh 'mvn --version'
-                    sh 'mvn clean package -DskipTests'
+                    sh 'mvn clean package -P${params.ENVIRONMENT}'
                 }
             }
             post{
