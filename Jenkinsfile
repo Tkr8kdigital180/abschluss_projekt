@@ -14,7 +14,7 @@ pipeline{
                 echo "========Build has started========"
                 dir("backend"){
                     sh 'mvn --version'
-                    sh 'mvn clean package -P${params.ENVIRONMENT}'
+                    sh "mvn clean package -P${params.ENVIRONMENT}"
                 }
             }
             post{
