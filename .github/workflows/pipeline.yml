@@ -31,11 +31,15 @@ jobs:
           mvn test
 
       - name: Docker build
-
+        run: |
+          
       - name: Docker push
+        run: |
 
-      - Name: Deploy dev
+      - name: Deploy dev
+        run: |
+      - name: Manual Approval
+        run: |
 
-      - Name: Manual Approval
-
-      - Name: Deploy prod    
+      - name: Deploy prod
+        run: |    
