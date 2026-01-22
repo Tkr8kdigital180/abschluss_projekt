@@ -3,7 +3,7 @@ name: pipeline
 on:
   push:
     branches:
-      - cicd-mit-jenkins
+      - main
 
 jobs:
   build:
