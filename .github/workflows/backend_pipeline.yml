@@ -47,6 +47,10 @@ jobs:
 
       - name: Deploy dev
         run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_DEV }}" > $HOME/.kube/config
+          kubectl apply -f deployment.yml
+          kubectl apply -f service.yml
       - name: Manual Approval
         run: |
 
