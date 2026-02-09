@@ -1,0 +1,48 @@
+name: pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5.2.0
+        with:
+          java-version: '17'
+          distribution: 'temurin' 
+          cache: 'maven'
+      
+      - name: build 
+        run: 
+          mvn clean package -Pprod
+
+      - name: Test
+        run: 
+          mvn test
+
+      - name: Docker build
+        run: 
+          docker build -t digitalmustermann/kukuk_backend .
+          
+      - name: Docker push
+        run: |
+
+      - name: Deploy dev
+        run: |
+      - name: Manual Approval
+        run: |
+
+      - name: Deploy prod
+        run: |    
