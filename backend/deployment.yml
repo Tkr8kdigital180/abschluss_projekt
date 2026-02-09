@@ -4,7 +4,6 @@ metadata:
   name: kukuk-backend
   namespace: romeo-dev
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: kukuk-backend
