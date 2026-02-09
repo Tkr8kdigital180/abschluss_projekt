@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: digitalmustermann/kukuk_backend:latest
+          image: digitalmustermann/kukuk_backend_dev:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
