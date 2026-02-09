@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kukuk-frontend
+  name: kukuk-backend
   namespace: romeo-dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kukuk-frontend
+      app: kukuk-backend
   template:
     metadata:
       labels:
-        app: kukuk-frontend
+        app: kukuk-backend
     spec:
       containers:
-        - name: frontend
-          image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/kukuk-backend:latest
+        - name: backend-container
+          image: digitalmustermann/kukuk_backend:latest
           ports:
             - containerPort: 80
