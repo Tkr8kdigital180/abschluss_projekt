@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-dev:
+  build-and-deploy-dev:
     runs-on: ubuntu-latest
 
     defaults:
@@ -49,9 +49,9 @@ jobs:
           kubectl apply -f deployment.yml
           kubectl apply -f service.yml
 
-  deploy-prod:
+  build-and-deploy-prod:
     runs-on: ubuntu-latest
-    needs: build-and-dev
+    needs: build-and-deploy-dev
 
     environment:
       name: prod  
@@ -74,7 +74,7 @@ jobs:
         run: mvn clean package -Pprod
 
       - name: Docker build (prod)
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/kukuk_backend:latest .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/kukuk_backend_prod:latest .
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
