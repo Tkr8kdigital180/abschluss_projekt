@@ -90,5 +90,5 @@ jobs:
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG_PROD }}" > $HOME/.kube/config
-          kubectl apply -f deployment.yml --validate=false
-          kubectl apply -f service.yml --validate=false    
+          kubectl apply -f deployment_prod.yml --validate=false
+          kubectl apply -f service_prod.yml --validate=false    
