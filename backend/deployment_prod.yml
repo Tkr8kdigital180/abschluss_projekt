@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kukuk-backend
+  namespace: romeo-prod
+spec:
+  selector:
+    matchLabels:
+      app: kukuk-backend
+  template:
+    metadata:
+      labels:
+        app: kukuk-backend
+    spec:
+      containers:
+        - name: backend-container
+          image: digitalmustermann/kukuk_backend_prod:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
