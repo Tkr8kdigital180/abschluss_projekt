@@ -1,0 +1,94 @@
+name: frontend-pipeline
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy-dev:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build (dev)
+        run: npm run build-dev
+
+      - name: Test
+        run: npm test
+
+      - name: Docker build
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/kukuk_frontend_dev:latest .
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker push
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/kukuk_frontend_dev:latest
+
+      - name: Deploy dev
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_DEV }}" > $HOME/.kube/config
+          kubectl apply -f deployment.yml
+          kubectl apply -f service.yml
+  
+  build-and-deploy-prod:
+    runs-on: ubuntu-latest
+    needs: build-and-deploy-dev
+    environment:
+      name: prod  
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build (prod)
+        run: npm run build-prod
+
+      - name: Test
+        run: npm test
+
+      - name: Docker build (prod)
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/kukuk_frontend_prod:latest .
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker push (prod)
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/kukuk_frontend_prod:latest
+
+      - name: Deploy prod
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_PROD }}" > $HOME/.kube/config
+          kubectl apply -f deployment.yml
+          kubectl apply -f service.yml    
